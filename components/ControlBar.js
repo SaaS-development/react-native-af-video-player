@@ -23,8 +23,7 @@ const ControlBar = (props) => {
     muted,
     fullscreen,
     theme,
-    inlineOnly,
-    hideFullScreenControl
+    inlineOnly
   } = props
 
   return (
@@ -46,15 +45,16 @@ const ControlBar = (props) => {
         size={20}
       />
       <Time time={duration} theme={theme.duration} />
-      { !inlineOnly || !hideFullScreenControl &&
-      <ToggleIcon
-        paddingRight
-        onPress={() => props.toggleFS()}
-        iconOff="fullscreen"
-        iconOn="fullscreen-exit"
-        isOn={fullscreen}
-        theme={theme.fullscreen}
-      />}
+
+      {(!props.hideFullScreenControl && !inlineOnly) &&
+        <ToggleIcon
+          paddingRight
+          onPress={() => props.toggleFS()}
+          iconOff="fullscreen"
+          iconOn="fullscreen-exit"
+          isOn={fullscreen}
+          theme={theme.fullscreen}
+        />}
     </LinearGradient>
   )
 }
@@ -67,7 +67,6 @@ ControlBar.propTypes = {
   fullscreen: PropTypes.bool.isRequired,
   muted: PropTypes.bool.isRequired,
   inlineOnly: PropTypes.bool.isRequired,
-  hideFullScreenControl: PropTypes.bool.isRequired,
   progress: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,

@@ -4,7 +4,8 @@ import {
   View,
   Animated,
   StyleSheet,
-  TouchableWithoutFeedback as Touchable
+  TouchableWithoutFeedback as Touchable,
+  TouchableOpacity
 } from 'react-native'
 import {
   PlayButton,
@@ -13,6 +14,8 @@ import {
   TopBar,
   ProgressBar
 } from './'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 const styles = StyleSheet.create({
   container: {
@@ -68,7 +71,7 @@ class Controls extends Component {
           break
         case this.state.hideControls:
           break
-        case this.state.seconds > this.props.controlDuration:
+        case this.state.seconds > 3:
           this.hideControls()
           break
         default:
@@ -127,8 +130,7 @@ class Controls extends Component {
       currentTime,
       duration,
       theme,
-      inlineOnly,
-      hideFullScreenControl
+      inlineOnly
     } = this.props
 
     const { center, ...controlBar } = theme
@@ -136,13 +138,16 @@ class Controls extends Component {
     return (
       <Touchable onPress={() => this.hideControls()}>
         <Animated.View style={[styles.container, { opacity: this.animControls }]}>
-          <TopBar
+          {/* <TopBar
             title={title}
             logo={logo}
             more={more}
             onMorePress={() => onMorePress()}
             theme={{ title: theme.title, more: theme.more }}
-          />
+          /> */}
+          {this.props.closeVideo && <TouchableOpacity onPress={this.props.closeVideo} style={{ position: 'absolute', top: RFValue(20), left: RFValue(10), zIndex: 100 }}>
+            <AntDesign name="closecircleo" size={RFValue(20)} color="#FFF" />
+          </TouchableOpacity>}
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
             <PlayButton
               onPress={() => this.props.togglePlay()}
@@ -165,7 +170,7 @@ class Controls extends Component {
             duration={duration}
             theme={controlBar}
             inlineOnly={inlineOnly}
-            hideFullScreenControl={hideFullScreenControl}
+            hideFullScreenControl={this.props.hideFullScreenControl}
           />
         </Animated.View>
       </Touchable>
@@ -190,7 +195,6 @@ Controls.propTypes = {
   onMorePress: PropTypes.func.isRequired,
   paused: PropTypes.bool.isRequired,
   inlineOnly: PropTypes.bool.isRequired,
-  hideFullScreenControl: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   muted: PropTypes.bool.isRequired,
   more: PropTypes.bool.isRequired,
@@ -199,7 +203,7 @@ Controls.propTypes = {
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  logo: PropTypes.string.isRequired,
+  // logo: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired
 }
 
